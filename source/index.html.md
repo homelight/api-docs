@@ -2,9 +2,7 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
   - ruby
-  - python
   - javascript
 
 toc_footers:
@@ -19,11 +17,9 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the HomeLight API! 
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+This API follows the JSON:API Specification. You can view that <a href='http://jsonapi.org/'>here</a>.
 
 # Authentication
 
@@ -33,18 +29,6 @@ This example API documentation page was created with [Slate](https://github.com/
 require 'kittn'
 
 api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
 ```
 
 ```javascript
@@ -65,27 +49,27 @@ Kittn expects for the API key to be included in all API requests to the server i
 You must replace <code>meowmeowmeow</code> with your personal API key.
 </aside>
 
-# Kittens
+# Agents
 
-## Get All Kittens
+## Find an Agent
+
+`GET /api/vX/agents/:id`
+
+### Description
+
+Retrieves information about a specific agent.
+
+Parameter | Required | Default | Options
+--------- | -------- | ------- | -------
+id | yes | none | none
+include | no | none | preferences, transactions, metrics, badges, performance, awards
+
 
 ```ruby
 require 'kittn'
 
 api = Kittn::APIClient.authorize!('meowmeowmeow')
 api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
 ```
 
 ```javascript
@@ -116,124 +100,109 @@ let kittens = api.kittens.get();
 ]
 ```
 
-This endpoint retrieves all kittens.
+# Agent Preferences
 
-### HTTP Request
+## All
 
-`GET http://example.com/api/kittens`
+`GET /api/vX/agents/:id/preferences`
 
-### Query Parameters
+### Description
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+Retrieves all of the agent preferences for a specific agent.
+
+<aside class="warning">This can be a very slow call.</aside>
+
+## Client Greetings
+
+Client Greetings are shown on agent result cards in the **CLient Portal**.
+
+> GET
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.get
+```
+
+> UPDATE
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.get
+```
+
+> DELETE
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.get
+```
+
+### GET
+
+`GET /api/vX/agents/:id/preferences/greetings`
+
+
+### UPDATE
+
+`PATCH /api/vX/agents/:id/preferences/greetings`
+
+### DELETE
+
+`DELETE /api/vX/agents/:id/preferences/greetings`
+
+<aside class="warning">This method remove the agents specific client greeting which will cause the default client greetings to be used when their agent card is shown.</aside>
+
+## Professional Details
+
+`GET /api/vX/agents/:id/preferences/professional-details`
+
+### Description
+
+Retrieves the professional details preferences for a specific agent
+
+## Referral Settings
+
+`GET /api/vX/agents/:id/preferences/referral-settings`
+
+### Description
+
+Retrieves the referral settings preferences for a specific agent
+
+## Location Preferences
+
+`GET /api/vX/agents/:id/preferences/locations`
+
+### Description
+
+Retrieves the location preferences for a specific agent
+
+## Vacation Settings
+
+`GET /api/vX/agents/:id/preferences/vacation-settings`
+
+### Description
+
+Retrieves the vacation settings preferences for a specific agent
+
+## Specialties
+
+`GET /api/vX/agents/:id/preferences/specialties`
+
+### Description
+
+Retrieves the specialty preferences for a specific agent
+
+
 
 <aside class="success">
 Remember — a happy kitten is an authenticated kitten!
 </aside>
 
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
 
 <aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint deletes a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
-
